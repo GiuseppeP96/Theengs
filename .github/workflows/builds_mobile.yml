@@ -80,8 +80,8 @@ jobs:
              qmake ${{env.APP_NAME}}.pro CONFIG+=release
              make -j$(nproc)
              make -j$(nproc) apk_install_target
-             ls /Qt/6.6.3
-             /Qt/6.6.3/gcc_64/bin/androiddeployqt --input $BUILD_DIR/android-project-deployment-settings.json --output build
+             ls
+             /home/runner/work/Theengs/Qt/6.6.3/gcc_64/bin/androiddeployqt --input $BUILD_DIR/android-project-deployment-settings.json --output build
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
