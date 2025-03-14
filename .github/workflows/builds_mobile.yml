@@ -79,6 +79,8 @@ jobs:
         run: |
              qmake ${{env.APP_NAME}}.pro CONFIG+=release
              make -j$(nproc)
+             cd assets\android
+             gradle assemble
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -126,8 +128,7 @@ jobs:
         run: |
              qmake ${{env.APP_NAME}}.pro CONFIG+=release
              make -j`sysctl -n hw.logicalcpu`
-             cd assets\android
-             gradle assemble
+            
              
       - name: Upload artifact
         uses: actions/upload-artifact@v4
