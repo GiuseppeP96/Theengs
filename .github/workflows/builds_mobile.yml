@@ -73,8 +73,6 @@ jobs:
              cd contribs/
              python3 contribs_builder.py --qt-directory ${{env.QT_ROOT_DIR}}/../.. --qt-version ${{env.QT_VERSION}} --targets=android_armv8
              cd ..
-             ls build
-             ls build\arm64-v8a
 
       # Build application
       - name: Build application
@@ -82,6 +80,8 @@ jobs:
              qmake ${{env.APP_NAME}}.pro CONFIG+=release
              make -j$(nproc)
              make -j$(nproc) apk_install_target
+             ls build
+             ls build/arm64-v8a
              /Qt/6.6.3/gcc_64/bin/androiddeployqt --input $BUILD_DIR/android-project-deployment-settings.json --output build
       
       - name: Upload artifact
