@@ -79,8 +79,7 @@ jobs:
         run: |
              qmake ${{env.APP_NAME}}.pro CONFIG+=release
              make -j$(nproc)
-             cd assets/android
-             gradle assemble
+             cmake --build . --target apk
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
