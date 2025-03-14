@@ -15,7 +15,7 @@ on:
 env:
   APP_NAME: "Theengs"
   APP_VERSION: "1.4.1"
-  QT_VERSION: "6.8.2"
+  QT_VERSION: "6.6.3"
 
 #-------------------------------------------------------------------------------
 # Workflow jobs
@@ -126,6 +126,8 @@ jobs:
         run: |
              qmake ${{env.APP_NAME}}.pro CONFIG+=release
              make -j`sysctl -n hw.logicalcpu`
+             cd assets\android
+             gradle assemble
              
       - name: Upload artifact
         uses: actions/upload-artifact@v4
