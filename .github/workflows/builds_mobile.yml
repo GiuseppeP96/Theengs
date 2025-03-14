@@ -81,7 +81,8 @@ jobs:
              make -j$(nproc)
              make -j$(nproc) apk_install_target
              ls
-             #/home/runner/work/Theengs/Qt/6.6.3/gcc_64/bin/androiddeployqt --input android-Theengs-deployment-settings.json --output build
+             cp bin/libTheengs_arm64-v8a.so build/libs/arm64-v8a/libTheengs_arm64-v8a.so
+             /home/runner/work/Theengs/Qt/6.6.3/gcc_64/bin/androiddeployqt --input android-Theengs-deployment-settings.json --output build
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
