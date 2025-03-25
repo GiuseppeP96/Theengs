@@ -135,6 +135,9 @@ jobs:
              sudo apt-get install cmake ninja-build libtool automake m4 gettext -y
              qmake --version
              ninja --version
+             ls /home/runner/work/Theengs/Qt/6.6.3/android_armv7/
+             echo --
+             ls /home/runner/work/Theengs/Qt/6.6.3/android_armv7/../../6.6.3/android_armv7/bin/
 
       # Build dependencies (from contribs script)
       - name: Build dependencies (from contribs script)
