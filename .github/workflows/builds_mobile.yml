@@ -23,8 +23,77 @@ env:
 
 jobs:
   ## Android build #############################################################
-  build-android:
-    name: "Android CI build"
+  #build-android:
+  #  name: "Android CI build"
+  #  runs-on: ubuntu-20.04
+  #  steps:
+  #    # Checkout repository (and submodules)
+  #    - name: Checkout repository (and submodules)
+  #      uses: actions/checkout@v4
+  #      with:
+  #        submodules: recursive
+#
+  #    # Java environment (already installed in 'ubuntu-20.04')
+  #    - name: Setup Java environment
+  #      uses: actions/setup-java@v4
+  #      with:
+  #        distribution: 'temurin'
+  #        java-version: '17'
+#
+  #    # Android environment (already installed in 'ubuntu-20.04')
+  #    #- name: Setup Android environment
+  #    #  uses: android-actions/setup-android@v3
+  #    #- name: Install Android SDK / NDK / tools
+  #    #  run: |
+  #    #       sdkmanager "platforms;android-34"
+  #    #       sdkmanager "ndk;26.3.11579264"
+  #    #       sdkmanager "build-tools;34.0.0"
+#
+  #    # Install Qt (Android & desktop)
+  #    - name: Install Qt (Android & desktop)
+  #      uses: jurplel/install-qt-action@v4
+  #      with:
+  #        version: ${{env.QT_VERSION}}
+  #        host: 'linux'
+  #        target: 'android'
+  #        arch: 'android_arm64_v8a'
+  #        modules: qtconnectivity qtwebsockets qtcharts qtshadertools qt5compat
+  #        extra: '--autodesktop'
+#
+  #    # Setup env
+  #    - name: Setup env
+  #      run: |
+  #           sudo apt-get install cmake ninja-build libtool automake m4 gettext -y
+  #           qmake --version
+  #           ninja --version
+#
+  #    # Build dependencies (from contribs script)
+  #    - name: Build dependencies (from contribs script)
+  #      run: |
+  #           cd contribs/
+  #           python3 contribs_builder.py --qt-directory ${{env.QT_ROOT_DIR}}/../.. --qt-version ${{env.QT_VERSION}} --targets=android_armv8
+  #           cd ..
+#
+  #    # Build application
+  #    - name: Build application
+  #      run: |
+  #           qmake ${{env.APP_NAME}}.pro CONFIG+=release
+  #           make -j$(nproc)
+  #           make -j$(nproc) apk_install_target
+  #           ls
+  #           mkdir -p build/libs/arm64-v8a
+  #           cp bin/libTheengs_arm64-v8a.so build/libs/arm64-v8a/libTheengs_arm64-v8a.so
+  #           /home/runner/work/Theengs/Qt/6.6.3/gcc_64/bin/androiddeployqt --input android-Theengs-deployment-settings.json --output build
+  #    
+  #    - name: Upload artifact
+  #      uses: actions/upload-artifact@v4
+  #      with:
+  #  # A file, directory or wildcard pattern that describes what to upload
+  #  # Required.
+  #        path: /build/build/outputs/apk/debug
+
+  build-android-V7:
+    name: "Android v7a CI build"
     runs-on: ubuntu-20.04
     steps:
       # Checkout repository (and submodules)
@@ -56,7 +125,7 @@ jobs:
           version: ${{env.QT_VERSION}}
           host: 'linux'
           target: 'android'
-          arch: 'android_arm64_v8a'
+          #arch: 'android_armeabi-v7a'
           modules: qtconnectivity qtwebsockets qtcharts qtshadertools qt5compat
           extra: '--autodesktop'
 
@@ -71,7 +140,7 @@ jobs:
       - name: Build dependencies (from contribs script)
         run: |
              cd contribs/
-             python3 contribs_builder.py --qt-directory ${{env.QT_ROOT_DIR}}/../.. --qt-version ${{env.QT_VERSION}} --targets=android_armv8
+             python3 contribs_builder.py --qt-directory ${{env.QT_ROOT_DIR}}/../.. --qt-version ${{env.QT_VERSION}} --targets=android_armv7
              cd ..
 
       # Build application
@@ -81,8 +150,8 @@ jobs:
              make -j$(nproc)
              make -j$(nproc) apk_install_target
              ls
-             mkdir -p build/libs/arm64-v8a
-             cp bin/libTheengs_arm64-v8a.so build/libs/arm64-v8a/libTheengs_arm64-v8a.so
+             mkdir -p build/libs/armeabi-v7a
+             cp bin/libTheengs_armeabi-v7a.so build/libs/armeabi-v7a/libTheengs_armeabi-v7a.so
              /home/runner/work/Theengs/Qt/6.6.3/gcc_64/bin/androiddeployqt --input android-Theengs-deployment-settings.json --output build
       
       - name: Upload artifact
@@ -91,51 +160,51 @@ jobs:
     # A file, directory or wildcard pattern that describes what to upload
     # Required.
           path: /build/build/outputs/apk/debug
-
+          
   ## iOS build #################################################################
-  build-ios:
-    name: "iOS CI build"
-    runs-on: macos-12
-    steps:
-      # Checkout repository (and submodules)
-      - name: Checkout repository (and submodules)
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      # Install Qt (iOS & desktop)
-      - name: Install Qt (iOS & desktop)
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: ${{env.QT_VERSION}}
-          host: 'mac'
-          target: 'ios'
-          modules: qtconnectivity qtwebsockets qtcharts qtshadertools qt5compat
-          extra: '--autodesktop'
-
-      # Setup env
-      - name: Setup env
-        run: |
-             brew install cmake ninja automake autoconf libtool pkg-config
-             qmake --version
-
-      # Build dependencies (from contribs script)
-      - name: Build dependencies (from contribs script)
-        run: |
-             cd contribs/
-             python3 contribs_builder.py --qt-directory ${{env.QT_ROOT_DIR}}/../.. --qt-version ${{env.QT_VERSION}} --targets=ios_armv8
-             cd ..
-
-      # Build application
-      - name: Build application
-        run: |
-             qmake ${{env.APP_NAME}}.pro CONFIG+=release
-             make -j`sysctl -n hw.logicalcpu`
-            
-             
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-    # A file, directory or wildcard pattern that describes what to upload
-    # Required.
-          path: .
+  #build-ios:
+  #  name: "iOS CI build"
+  #  runs-on: macos-12
+  #  steps:
+  #    # Checkout repository (and submodules)
+  #    - name: Checkout repository (and submodules)
+  #      uses: actions/checkout@v4
+  #      with:
+  #        submodules: recursive
+#
+  #    # Install Qt (iOS & desktop)
+  #    - name: Install Qt (iOS & desktop)
+  #      uses: jurplel/install-qt-action@v4
+  #      with:
+  #        version: ${{env.QT_VERSION}}
+  #        host: 'mac'
+  #        target: 'ios'
+  #        modules: qtconnectivity qtwebsockets qtcharts qtshadertools qt5compat
+  #        extra: '--autodesktop'
+#
+  #    # Setup env
+  #    - name: Setup env
+  #      run: |
+  #           brew install cmake ninja automake autoconf libtool pkg-config
+  #           qmake --version
+#
+  #    # Build dependencies (from contribs script)
+  #    - name: Build dependencies (from contribs script)
+  #      run: |
+  #           cd contribs/
+  #           python3 contribs_builder.py --qt-directory ${{env.QT_ROOT_DIR}}/../.. --qt-version ${{env.QT_VERSION}} --targets=ios_armv8
+  #           cd ..
+#
+  #    # Build application
+  #    - name: Build application
+  #      run: |
+  #           qmake ${{env.APP_NAME}}.pro CONFIG+=release
+  #           make -j`sysctl -n hw.logicalcpu`
+  #          
+  #           
+  #    - name: Upload artifact
+  #      uses: actions/upload-artifact@v4
+  #      with:
+  #  # A file, directory or wildcard pattern that describes what to upload
+  #  # Required.
+  #        path: .
